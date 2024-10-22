@@ -1,4 +1,8 @@
+# Import local library with art
 import art
+
+# Import external library for math calculations
+import random
 
 '''
 - The deck is unlimited in size.
@@ -18,6 +22,7 @@ cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 # Create the main function of the game
 def blackjack():
 
+	print("")
 
 
 
@@ -41,7 +46,7 @@ def opening_sentences():
 		print(f"Your cards: {cards_player}, current score: {current_score}\n")
 		print(f"Computer's first card: {computer_card}")
 
-		input("Type 'y' to get another card, type 'n' to pass: ")
+		check_for_extra_card = input("Type 'y' to get another card, type 'n' to pass: ")
 
 
 		# Display final hand
@@ -78,6 +83,22 @@ def game_mechanics():
 	# Create a list with all the cards
 	cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
+	# Pick a random card from the list
+	random_pick = random.randint(0, len(cards))
+
+	# Pick cards until players says stop
+	while check_for_extra_card == 'y':
+
+		# Add random card to score player
+		score_player += cards[random_pick]
+
+	# Add random card to score player
+	score_player += cards[random_pick]
+
+	score_player += score_player
+
+	print(score_player)
+
 	# Step 1
 	# Pick two random cards for player and add them together
 
@@ -103,7 +124,7 @@ def game_mechanics():
 
 
 
-
+game_mechanics()
 
 
 
