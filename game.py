@@ -59,9 +59,45 @@ def calculate_computer_score():
 def calculate_player_score():
     return sum(cards_player) 
 
+# Create a function for text output
+def text_output(status):
+    
+    # Blackjack
+    if status == 'blackjack':
+        print("You have a Blackjack! You win! 🎉")
+    
+    # If player has 21
+    elif status == '21':
+        
+        print("You have 21! You win! 🎉")
+              
+    # Player wins
+    elif status == 'player_wins':
+        print("You win! 🎉")
+     
+    # You Bust (over)
+    elif status == 'player_bust':
+        print("You went over. You lose...")
+
+    # Opponent (computer) bust
+    elif status == 'computer_bust':
+        print("Opponent went over. You win! 🎉")
+
+    # Computer has more points
+    elif status == 'computer_wins':
+        print("You lose...")
+        
+    # Draw
+    elif status == 'draw':
+        print("It's a draw, so you lose...")
+
 
 # Check if player wants to play a game
 while check_play_game != 'n':
+    
+    # Clear the cards for player and computer
+    cards_player = []
+    cards_computer = []
     
     # Clear the screen
     os.system('cls||clear')
@@ -83,80 +119,135 @@ while check_play_game != 'n':
     # Print the cards of the player and the computer
     print(f"Your cards: {cards_player}, current score: {sum(cards_player)}")
     print(f"Computer's first card: {cards_computer}")
-    print(cards)
-
 
     # Check if the player has a blackjack right away
     if sum(cards_player) == 21:
-        print("You have a Blackjack! You win! 🎉")
+        text_output('blackjack')
         break
     else:
+        
         # Ask the player if they want to draw another card
-        draw_card = input("Type 'y' to get another card, type 'n' to pass: ")
+        check_draw_card = input("Type 'y' to get another card, type 'n' to pass: ")
         
-        # Als de speler een kaart wilt, geef hem een extra kaart en check de score
-        temp_card_player = random.choice(cards)
-        cards_player.append(temp_card_player)
-        cards.remove(temp_card_player)        
+        while check_draw_card != 'n':
         
-         # calculate_computer_score
-        calculate_computer_score()
+            # Als de speler een kaart wilt, geef hem een extra kaart en check de score
+            temp_card_player = random.choice(cards)
+            cards_player.append(temp_card_player)
+            cards.remove(temp_card_player)        
             
-        # Check if the player has 21
-        if sum(cards_player) == 21:
-            
-            print("You have 21! You win! 🎉")
+            # Show the cards of the player and the computer
+            print(f"Your cards: {cards_player}, current score: {sum(cards_player)}")
+            print(f"Computer's first card: {cards_computer}")
                 
-            # Show the final hands and the outcome of the game
-            print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
-            print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
                 
-        # Check if Player wins
-        elif calculate_player_score() > calculate_computer_score():
-        
-            print("You win! 🎉")
+            # Check if the player has 21
+            if sum(cards_player) == 21:
+                
+                text_output('21')  
+                                
+                # Show the final hands and the outcome of the game
+                print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
+                print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
+                
+                break
+                
+            elif sum(cards_player) > 21:
+                
+                text_output('player_bust')
+                
+                # Show the final hands and the outcome of the game
+                print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
+                print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
+                
+                break
+                
+            elif sum(cards_player) < 21:
+                
+                check_draw_card = input("Type 'y' to get another card, type 'n' to pass: ")
+                
+                
+                
+                
+                
             
-            # Show the final hands and the outcome of the game
-            print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
-            print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
+                    
+            # # Check if Player wins
+            # elif calculate_player_score() > calculate_computer_score() and calculate_player_score() <= 21:
+            
+            #     print("You win! 🎉")
+                
+            #     # Show the final hands and the outcome of the game
+            #     print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
+            #     print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
 
-        # Check if Player is busted
-        elif calculate_player_score() > 21:
-            
-            print("You went over. You lose...")
-            
-            # Show the final hands and the outcome of the game
-            print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
-            print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
+            # # Check if Player is busted
+            # elif calculate_player_score() > 21:
                 
-        # Check if Computer wins
-        elif calculate_player_score() < calculate_computer_score():
+            #     print("You went over. You lose...")
+                
+            #     # Show the final hands and the outcome of the game
+            #     print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
+            #     print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
+                    
+            # # Check if Computer wins
+            # elif calculate_player_score() < calculate_computer_score():
+            
+            #     print("You lose...")
+                
+            #     # Show the final hands and the outcome of the game
+            #     print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
+            #     print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
+                    
+            # # Check if computer is busted
+            # elif calculate_computer_score() > 21:
+            
+            #     print("Opponent went over. You win! 🎉.")
+                
+            #     # Show the final hands and the outcome of the game
+            #     print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
+            #     print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
+                    
+            # # Check if it is a draw
+            # else:
+                            
+            #     print("It's a draw!")
+                
+            #     # Show the final hands and the outcome of the game
+            #     print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
+            #     print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
+                
+            
+            # # Ask the player if they want to draw another card
+            # check_draw_card = input("Type 'y' to get another card, type 'n' to pass: ")
+                
+        # If the player pass
+        # Calculate the total score of the player
+        calculate_player_score()
         
-            print("You lose...")
+        # Calculate the total score of the computer
+        calculate_computer_score()
+        
+        # Check who won the game
+        if calculate_player_score() > calculate_computer_score():
+        
+            text_output('player_wins')
             
-            # Show the final hands and the outcome of the game
-            print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
-            print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
-                
-        # Check if computer is busted
+        elif calculate_player_score() == calculate_computer_score():
+            
+            text_output('draw')
+             
         elif calculate_computer_score() > 21:
-           
-            print("Opponent went over. You win! 🎉.")
             
-            # Show the final hands and the outcome of the game
-            print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
-            print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
-                
-        # Check if it is a draw
-        else:
-                        
-            print("It's a draw!")
+            text_output('computer_bust')
+             
+        else : 
             
-            # Show the final hands and the outcome of the game
-            print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
-            print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
+            text_output('computer_wins')
             
-            
+        # Show the final hands and the outcome of the game
+        print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
+        print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
     
     # Ask the player if they want to play another game
     check_play_game = input("Do you want to play another game of Blackjack? Type 'y' or 'n': ")
