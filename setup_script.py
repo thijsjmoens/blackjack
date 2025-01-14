@@ -19,15 +19,73 @@ cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 '''
 
 
-# Add empty variable for scores of player and computer
-score_player = 0
-score_computer = 0
+# Create the main function of the game
+def blackjack():
 
-# Check if player wants an extra card
-check_for_extra_card = input("Type 'y' to get another card, type 'n' to pass: ")
+	print("")
 
-# Pick cards until players says stop
-while check_for_extra_card == 'y':
+
+
+# Call the main function
+blackjack()
+
+
+
+# Function for all inputs and displays
+def opening_sentences():
+    
+    # Create variables
+    cards_player = []
+    current_score = 0
+    computer_card = []
+
+	# create variable to check if user wants to play a game
+	check_play_game = input("Do you want to play a game of Blackjack? Type 'y' or 'n': ")
+ 
+	# Kill the game if user doesn't want to play
+	if check_play_game == 'n':
+		return
+
+	while check_play_game == 'y':
+
+		print(art.logo)
+
+		print(f"Your cards: {cards_player}, current score: {current_score}\n")
+		print(f"Computer's first card: {computer_card}")
+
+		check_for_extra_card = input("Type 'y' to get another card, type 'n' to pass: ")
+
+
+		# Display final hand
+		print(f"Your final hand: {final_hand}, final score: {final_score}")
+		print(f"Computer's final hand: {computer_final_hand}, final score: {computer_final_score}")
+
+		# Display the outcome
+
+		# Blackjack
+		# Blackjack is only when you have a 10 and a Ace, otherwise if it's 21, it's simply you win
+		print("Win with a Blackjack!")
+
+		# You win
+		print("You win!")
+
+		# You Bust (over)
+		print("You went over. You lose...")
+
+		# Opponent (computer) bust
+		print("Opponent went over. You win!")
+
+		# Computer has more points
+		print("You lose...")
+
+
+	
+
+
+
+
+
+def game_mechanics():
 
 	# Create a list with all the cards
 	cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
@@ -35,10 +93,52 @@ while check_for_extra_card == 'y':
 	# Pick a random card from the list
 	random_pick = random.randint(0, len(cards))
 
+	# Pick cards until players says stop
+	while check_for_extra_card == 'y':
+
+		# Add random card to score player
+		score_player += cards[random_pick]
+
 	# Add random card to score player
 	score_player += cards[random_pick]
 
+	score_player += score_player
+
 	print(score_player)
 
+	# Step 1
+	# Pick two random cards for player and add them together
+
+	# Pick a random card for computer (dealer)
+
+
+	# Step 2
 	# Check if player wants an extra card
-	check_for_extra_card = input("Type 'y' to get another card, type 'n' to pass: ")
+	# If so, add to the total of the two previous cards 
+		# Check if there is an ace. If third card goes above 21, make it 1, otherwise keep it 11
+
+	# Step 3 
+	# Repeat asking player for more cards, unless player get bust
+
+	# Step 4
+	# If player passed or get busted, draw cards for dealer
+		# Stop if total hits 17 or more
+		# Stop if player gets busted
+
+
+
+
+
+
+
+game_mechanics()
+
+
+
+
+
+
+
+
+
+

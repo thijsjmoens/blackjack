@@ -35,13 +35,20 @@ check_play_game = ''
 
 # Create a function to finish the game
 def finish_game(status):
-    # Print the outcome of the game
     
     # Blackjack (Blackjack is only when you have a 10 and a Ace, otherwise if it's 21, it's simply you win)
     if status == 'blackjack':
 	    print("You have a Blackjack! You win! 🎉")
-     
-    # You win
+    
+    # Mechanics for if player has 21
+    elif status == '21':
+        
+        # calculate_computer_score
+        calculate_computer_score()
+                
+        # Show the final hands and the outcome of the game
+              
+    # Player wins
     elif status == 'player_wins':
 	    print("You win! 🎉")
      
@@ -90,9 +97,9 @@ def calculate_player_score():
     
     
 # Create a function to check who won the game
-def game_mechanics():
+def game_mechanics(status):
     
-    # - Blackjack
+    # - 21
     if sum(cards_player) == 21:
         finish_game('blackjack')
         
@@ -151,15 +158,32 @@ def blackjack_game():
             
             # Check if the player has 21
             if sum(cards_player) == 21:
-                --> player_has_21
-                --> calculate_computer_score
-                --> check_winner
+                finish_game('21')
                 
-            # Check if the player went over 21
-            elif sum(cards_player) > 21:
-                --> player_is_busted
-                --> calculate_computer_score
-                --> computer_wins
+            # Check if Player wins
+            elif calculate_player_score() > calculate_computer_score():
+                finish_game('player_wins')
+
+            # Check if Player is busted
+            elif calculate_player_score() > 21:
+                finish_game('player_bust')
+                
+            # Check if Computer wins
+            elif calculate_player_score() < calculate_computer_score():
+                finish_game('computer_wins')
+                
+            # Check if computer is busted
+            elif calculate_computer_score() > 21:
+                finish_game('computer_bust')
+                
+            # Check if it is a draw
+            else:
+                finish_game('draw')
+            
+            
+            
+            
+    
             
             else:
                 print(f"Your cards: {cards_player}, current score: {sum(cards_player)}")
