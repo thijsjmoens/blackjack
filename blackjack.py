@@ -105,7 +105,7 @@ def start_game():
     # Print the logo of the game
     print(art.logo)
 
-    # Assign two cards to the player at the start of the game
+     # Assign two cards to the player at the start of the game
     for car in range(2):
         temp_card_player = random.choice(cards)
         cards_player.append(temp_card_player)
