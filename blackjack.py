@@ -1,17 +1,29 @@
-# Import local library with art
+#!/usr/bin/env python
+
+# Import local and external libraries
 import art
-
-# Import external library for math calculations
 import random
+import os
 
+# Credits
+__author__ = "Thijs Moens"
+__copyright__ = "Copyright 2025, Thijs Moens"
+__credits__ = ["Thijs Moens"]
+__license__ = "GPL"
+__version__ = "1.0.0"
+__maintainer__ = "Thijs Moens"
+__email__ = "thijsmoens@email.com"
+__status__ = "Production"
+
+# Information about the game
 '''
+This is a game of Blackjack. The rules are as follows:
 - The deck is unlimited in size.
 - There are no jokers.
 - The Jack/Queen/King all count as 10.
 - The Ace can count as 11 or 1.
 - Use the following list as the deck of cards:
 cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
-
 - The cards in the list have equal probability of being drawn.
 - Cards are not removed from the deck as they are drawn.
 - The computer is the dealer.
@@ -21,192 +33,144 @@ cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 # Create a list of cards
 cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
-# Create a list for the player
-cards_player = []
-
-# Create a list for the computer
-cards_computer = []
-
-# Create a variable to draw a card
-check_draw_card = ''
-
-# Create a variable to check if the player wants to play a game
-check_play_game = ''
-
-# Create a function to finish the game
-def finish_game(status):
+def start_game(cards_player, score_player, cards_computer, score_computer):
     
-    # Blackjack (Blackjack is only when you have a 10 and a Ace, otherwise if it's 21, it's simply you win)
-    if status == 'blackjack':
-	    print("You have a Blackjack! You win! 🎉")
+    score_player = sum(cards_player)
+    score_computer = sum(cards_computer)
     
-    # Mechanics for if player has 21
-    elif status == '21':
+    # Clear the cards for player and computer
+    cards_player = []
+    cards_computer = []
+    
+    # Clear the screen
+    os.system('cls||clear')
+    
+    # Print the logo of the game
+    print(art.logo)
+
+     # Assign two cards to the player at the start of the game
+    for car in range(2):
+        temp_card_player = random.choice(cards)
+        cards_player.append(temp_card_player)
+        cards.remove(temp_card_player)        
+            
+    # Assign one card to the computer at the start of the game
+    temp_card_computer = random.choice(cards)
+    cards_computer.append(temp_card_computer)
+    cards.remove(temp_card_computer)
+    score_player = sum(cards_player)
+    
+    # Print the cards of the player and the computer
+    print(f"Your cards: {cards_player}, current score: {score_player}")
+    print(f"Computer's first card: {cards_computer}")
+    
+    # Check if the player has a blackjack
+    if sum(cards_player) == 21:
+        print("You have a Blackjack! You win!")
+        end_game(cards_player, score_player, cards_computer, score_computer)
+    else :
+        player_logic(cards_player, score_player, cards_computer, score_computer)
+    
+    
+    
+def player_logic(cards_player, score_player, cards_computer, score_computer):
+    
+    check_draw_card = '' # Create a variable to draw a card
+    
+    while check_draw_card != 'n':
+
+        # Check if the player has 21
+        if sum(cards_player) == 21:
+            check_draw_card = 'n'
+            print("You have 21! You win! 🎉")
+            end_game(cards_player, score_player, cards_computer, score_computer)
         
-        # calculate_computer_score
-        calculate_computer_score()
+        # Check if the player has more than 21
+        elif sum(cards_player) > 21:
+            check_draw_card = 'n'
+            print("You went over. You lose...")
+            end_game(cards_player, score_player, cards_computer, score_computer)
+        
+        # Check if the player has less than 21
+        elif sum(cards_player) < 21:
+            
+            # Ask the player if they want to draw another card
+            check_draw_card = input("Type 'y' to get another card, type 'n' to pass: ")
+            
+            # Assign a card to the player
+            if check_draw_card == 'y':
+                temp_card_player = random.choice(cards)
+                cards_player.append(temp_card_player)
+                cards.remove(temp_card_player)        
+                score_player = sum(cards_player)
+            
+                # Show the cards of the player and the computer
+                print(f"Your cards: {cards_player}, current score: {score_player}")
+                print(f"Computer's first card: {cards_computer}")
                 
-        # Show the final hands and the outcome of the game
-              
-    # Player wins
-    elif status == 'player_wins':
-	    print("You win! 🎉")
-     
-    # You Bust (over)
-    elif status == 'player_bust':
-        print("You went over. You lose...")
-
-	# Opponent (computer) bust
-    elif status == 'computer_bust':
-	    print("Opponent went over. You win! 🎉")
-
-	# Computer has more points
-    elif status == 'computer_wins':
-	    print("You lose...")
+            # If the player doesn't want to draw a card, the computer will play
+            else:
+                computer_logic(cards_player, score_player, cards_computer, score_computer)
+            
     
-    # Draw
-    else:
-        print("It's a draw!")
     
-    if status == 'blackjack':
-        # Don't show the final hands
-        return
-    else : 
-        # Print the final hands of the player and the computer
-        print(f"Your final hand: {cards_player}, final score: {sum(cards_player)}")
-        print(f"Computer's final hand: {cards_computer}, final score: {sum(cards_computer)}")
-    
-    # Ask the player if they want to play another game
-    check_play_game = input("Do you want to play another game of Blackjack? Type 'y' or 'n': ")
-   
-   
-# Create a function to calculate the score of the computer
-def calculate_computer_score():
+def computer_logic(cards_player, score_player, cards_computer, score_computer):
     
     # Draw a card for the computer until the score is 17 or higher
     while sum(cards_computer) < 17:
-        cards_computer.append(random.choice(cards))
+        temp_card_computer = random.choice(cards)
+        cards_computer.append(temp_card_computer)
+        cards.remove(temp_card_computer)
+        score_computer = sum(cards_computer)
     
-    # Return the score of the computer
-    return sum(cards_computer)
-
-
-# Create a function to calculate the score of the player
-def calculate_player_score():
-    return sum(cards_player) 
+    check_winner(cards_player, score_player, cards_computer, score_computer)
     
     
-# Create a function to check who won the game
-def game_mechanics(status):
+def check_winner(cards_player, score_player, cards_computer, score_computer):
     
-    # - 21
-    if sum(cards_player) == 21:
-        finish_game('blackjack')
-        
-    # - Player wins
-    elif calculate_player_score() > calculate_computer_score():
-        finish_game('player_wins')
-
-    # - Player bust
-    elif calculate_player_score() > 21:
-        finish_game('player_bust')
-        
-    # - Computer wins
-    elif calculate_player_score() < calculate_computer_score():
-        finish_game('computer_wins')
-        
-    # - Computer bust
-    elif calculate_computer_score() > 21:
-        finish_game('computer_bust')
-        
-    # - Draw
-    else:
-        finish_game('draw')
+    # If computer is bust
+    if score_computer > 21:
+        print("Opponent went over. You win! 🎉.") 
+        end_game(cards_player, score_player, cards_computer, score_computer)
+    
+    # If the player has more points
+    elif score_player > score_computer:
+        print("You win! 🎉")
+        end_game(cards_player, score_player, cards_computer, score_computer)
+    
+    # If the computer has more points
+    elif score_computer > score_player:
+        print("You lose...")
+        end_game(cards_player, score_player, cards_computer, score_computer)
     
     
-def blackjack_game():
+def end_game(cards_player, score_player, cards_computer, score_computer):
     
-    # Create a variable to check if the player wants to play a game
-    check_play_game = ''
+    print(f"Your final hand: {cards_player}, final score: {score_player}")
+    print(f"Computer's final hand: {cards_computer}, final score: {score_computer}")
     
+    
+def main():
+    
+    cards_player = []
+    score_player = 0
+    cards_computer = []
+    score_computer = 0
+    check_play_game = '' 
+    
+    # Ask the player if they want to play another game
+    check_play_game = input("Do you want to play another game of Blackjack? Type 'y' or 'n': ")
+    
+    # Check if player wants to play a game
     while check_play_game != 'n':
-        
-        # Print the logo of the game
-        print(art.logo)
-
-        # Assign two cards to the player at the start of the game
-        for car in range(2):
-            cards_player.append(random.choice(cards))
-            
-        # Assign one card to the computer at the start of the game
-        cards_computer.append(random.choice(cards))
-
-        # Print the cards of the player and the computer
-        print(f"Your cards: {cards_player}, current score: {sum(cards_player)}")
-        print(f"Computer's first card: {cards_computer}")
-
-        # Check if the player has a blackjack right away
-        if sum(cards_player) == 21:
-            finish_game('blackjack')
-
-        else:
-            # Ask the player if they want to draw another card
-            draw_card = input("Type 'y' to get another card, type 'n' to pass: ")
-            
-            # Als de speler een kaart wilt, geef hem een extra kaart en check de score
-            cards_player.append(random.choice(cards)) # Geef extra kaart
-            
-            # Check if the player has 21
-            if sum(cards_player) == 21:
-                finish_game('21')
-                
-            # Check if Player wins
-            elif calculate_player_score() > calculate_computer_score():
-                finish_game('player_wins')
-
-            # Check if Player is busted
-            elif calculate_player_score() > 21:
-                finish_game('player_bust')
-                
-            # Check if Computer wins
-            elif calculate_player_score() < calculate_computer_score():
-                finish_game('computer_wins')
-                
-            # Check if computer is busted
-            elif calculate_computer_score() > 21:
-                finish_game('computer_bust')
-                
-            # Check if it is a draw
-            else:
-                finish_game('draw')
-            
-            
-            
-            
     
-            
-            else:
-                print(f"Your cards: {cards_player}, current score: {sum(cards_player)}")
-                print(f"Computer's first card: {cards_computer}")
-                draw_card = input("Type 'y' to get another card, type 'n' to pass: ")
-            
-            
-            # Draw a card if the player wants to
-            while draw_card == 'y':
-                cards_player.append(random.choice(cards))
-                print(f"Your cards: {cards_player}, current score: {sum(cards_player)}")
-                print(f"Computer's first card: {cards_computer}")
-                
-                # Check the game mechanics and see who won
-                game_mechanics()
-                
+        # This is where the main function is called
+        start_game(cards_player, score_player, cards_computer, score_computer)
+        player_logic(cards_player, score_player, cards_computer, score_computer)
+        computer_logic(cards_player, score_player, cards_computer, score_computer)
+        check_winner(cards_player, score_player, cards_computer, score_computer)
+        end_game(cards_player, score_player, cards_computer, score_computer)
         
-            
-        
-        
-        # create variable to check if user wants to play a game
-        check_play_game = input("Do you want to play a game of Blackjack? Type 'y' or 'n': ")
-        
-        
-# Call the function to start the game
-blackjack_game()
+# Start the game
+if __name__ == "__main__":
+    main()
