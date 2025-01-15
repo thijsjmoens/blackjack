@@ -30,17 +30,74 @@ cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 - The computer stops at 17
 '''
 
-# Create a list of cards
-cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
-def start_game(cards_player, score_player, cards_computer, score_computer):
+
+def main():
     
+    check_play_game = '' 
+    
+    # Ask the player if they want to play another game
+    check_play_game = input("Do you want to play another game of Blackjack? Type 'y' or 'n': ")
+    
+    # Check if player wants to play a game
+    while check_play_game != 'n':
+            
+        # This is where the game starts
+        start_game()
+  
+          
+# Function to keep the card deck
+def card_deck(give_card):
+    cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+    
+    
+    temp_card_player = random.choice(cards)
+        cards_player.append(temp_card_player)
+        cards.remove(temp_card_player)   
+        temp_cards.append(temp_card_player)
+    return cards
+
+
+# Function to keep the score of the player
+def score_player(cards_player):
     score_player = sum(cards_player)
+    return score_player
+
+
+# Function to keep the score of the computer
+def score_computer(cards_computer):
     score_computer = sum(cards_computer)
+    return score_computer   
+
+
+# Function to print the current cards and score of the player and the first card of the computer
+def print_cards():
     
+    score_player = score_player(cards_player)
+    
+    print(f"Your cards: {cards_player}, current score: {score_player}")
+    print(f"Computer's first card: {cards_computer}")
+    
+
+# Function to show the cards of the player
+def show_cards_player(input_cards):
+    
+    
+
+
+# Function to start the game
+def start_game():
+        
     # Clear the cards for player and computer
     cards_player = []
     cards_computer = []
+    # cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+    temp_cards = []
+    # score_player = 0
+    # score_computer = 0
+
+    # cards.append(temp_cards)
+
     
     # Clear the screen
     os.system('cls||clear')
@@ -48,17 +105,27 @@ def start_game(cards_player, score_player, cards_computer, score_computer):
     # Print the logo of the game
     print(art.logo)
 
-     # Assign two cards to the player at the start of the game
+    # Assign two cards to the player at the start of the game
     for car in range(2):
         temp_card_player = random.choice(cards)
         cards_player.append(temp_card_player)
-        cards.remove(temp_card_player)        
+        cards.remove(temp_card_player)   
+        temp_cards.append(temp_card_player)
+        
+        # Assign the cards to the total score of the player
+        score_player(cards_player)
             
     # Assign one card to the computer at the start of the game
     temp_card_computer = random.choice(cards)
     cards_computer.append(temp_card_computer)
     cards.remove(temp_card_computer)
-    score_player = sum(cards_player)
+  
+    # Assign the cards to the total score of the computer
+    score_computer(cards_computer)
+    
+    
+    temp_cards.append(temp_card_computer)  
+
     
     # Print the cards of the player and the computer
     print(f"Your cards: {cards_player}, current score: {score_player}")
@@ -66,14 +133,14 @@ def start_game(cards_player, score_player, cards_computer, score_computer):
     
     # Check if the player has a blackjack
     if sum(cards_player) == 21:
-        print("You have a Blackjack! You win!")
-        end_game(cards_player, score_player, cards_computer, score_computer)
+        print("You have a Blackjack! You win! 🎉")
+        end_game(cards_player, score_player, cards_computer, score_computer, cards, temp_cards)
     else :
-        player_logic(cards_player, score_player, cards_computer, score_computer)
+        player_logic(cards_player, score_player, cards_computer, score_computer, cards, temp_cards)
     
     
     
-def player_logic(cards_player, score_player, cards_computer, score_computer):
+def player_logic(cards_player, score_player, cards_computer, score_computer, cards, temp_cards):
     
     check_draw_card = '' # Create a variable to draw a card
     
@@ -83,13 +150,13 @@ def player_logic(cards_player, score_player, cards_computer, score_computer):
         if sum(cards_player) == 21:
             check_draw_card = 'n'
             print("You have 21! You win! 🎉")
-            end_game(cards_player, score_player, cards_computer, score_computer)
+            end_game(cards_player, score_player, cards_computer, score_computer, cards, temp_cards)
         
         # Check if the player has more than 21
         elif sum(cards_player) > 21:
             check_draw_card = 'n'
             print("You went over. You lose...")
-            end_game(cards_player, score_player, cards_computer, score_computer)
+            end_game(cards_player, score_player, cards_computer, score_computer, cards, temp_cards)
         
         # Check if the player has less than 21
         elif sum(cards_player) < 21:
@@ -103,6 +170,7 @@ def player_logic(cards_player, score_player, cards_computer, score_computer):
                 cards_player.append(temp_card_player)
                 cards.remove(temp_card_player)        
                 score_player = sum(cards_player)
+                temp_cards.append(temp_card_player)
             
                 # Show the cards of the player and the computer
                 print(f"Your cards: {cards_player}, current score: {score_player}")
@@ -110,11 +178,11 @@ def player_logic(cards_player, score_player, cards_computer, score_computer):
                 
             # If the player doesn't want to draw a card, the computer will play
             else:
-                computer_logic(cards_player, score_player, cards_computer, score_computer)
+                computer_logic(cards_player, score_player, cards_computer, score_computer, cards, temp_cards)
             
     
     
-def computer_logic(cards_player, score_player, cards_computer, score_computer):
+def computer_logic(cards_player, score_player, cards_computer, score_computer, cards, temp_cards):
     
     # Draw a card for the computer until the score is 17 or higher
     while sum(cards_computer) < 17:
@@ -122,54 +190,48 @@ def computer_logic(cards_player, score_player, cards_computer, score_computer):
         cards_computer.append(temp_card_computer)
         cards.remove(temp_card_computer)
         score_computer = sum(cards_computer)
+        temp_cards.append(temp_card_computer)
     
-    check_winner(cards_player, score_player, cards_computer, score_computer)
+    check_winner(cards_player, score_player, cards_computer, score_computer, cards, temp_cards)
     
     
-def check_winner(cards_player, score_player, cards_computer, score_computer):
+def check_winner(cards_player, score_player, cards_computer, score_computer, cards, temp_cards):
     
     # If computer is bust
     if score_computer > 21:
         print("Opponent went over. You win! 🎉.") 
-        end_game(cards_player, score_player, cards_computer, score_computer)
+        end_game(cards_player, score_player, cards_computer, score_computer, cards, temp_cards)
     
     # If the player has more points
     elif score_player > score_computer:
         print("You win! 🎉")
-        end_game(cards_player, score_player, cards_computer, score_computer)
+        end_game(cards_player, score_player, cards_computer, score_computer, cards, temp_cards)
     
     # If the computer has more points
     elif score_computer > score_player:
         print("You lose...")
-        end_game(cards_player, score_player, cards_computer, score_computer)
+        end_game(cards_player, score_player, cards_computer, score_computer, cards, temp_cards)
+        
     
     
-def end_game(cards_player, score_player, cards_computer, score_computer):
+    
+def end_game(cards_player, score_player, cards_computer, score_computer, cards, temp_cards):
     
     print(f"Your final hand: {cards_player}, final score: {score_player}")
     print(f"Computer's final hand: {cards_computer}, final score: {score_computer}")
     
+    print(f"Cards drawn: {temp_cards}")
     
-def main():
     
-    cards_player = []
-    score_player = 0
-    cards_computer = []
-    score_computer = 0
-    check_play_game = '' 
     
     # Ask the player if they want to play another game
     check_play_game = input("Do you want to play another game of Blackjack? Type 'y' or 'n': ")
     
-    # Check if player wants to play a game
-    while check_play_game != 'n':
-    
-        # This is where the main function is called
-        start_game(cards_player, score_player, cards_computer, score_computer)
-        player_logic(cards_player, score_player, cards_computer, score_computer)
-        computer_logic(cards_player, score_player, cards_computer, score_computer)
-        check_winner(cards_player, score_player, cards_computer, score_computer)
-        end_game(cards_player, score_player, cards_computer, score_computer)
+    if check_play_game == 'y':
+        return check_play_game, temp_cards
+    else:   
+        exit()
+        
         
 # Start the game
 if __name__ == "__main__":
