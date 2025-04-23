@@ -12,7 +12,7 @@ __credits__ = ["Thijs Moens"]
 __license__ = "GPL"
 __version__ = "1.0.0"
 __maintainer__ = "Thijs Moens"
-__email__ = "thijsmoens@email.com"
+__email__ = "thijswillemmoens@gmail.com"
 __status__ = "Production"
 
 # Information about the game
